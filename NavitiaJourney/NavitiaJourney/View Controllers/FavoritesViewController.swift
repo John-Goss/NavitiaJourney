@@ -11,9 +11,8 @@ class FavoritesViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view.
+		self.title = "FavoritesVC"
+		self.navigationController?.navigationBar.isHidden = true
+		self.view.backgroundColor = UIColor(named: "BackgroundColorSet")
 	}
-
-
 }
-
