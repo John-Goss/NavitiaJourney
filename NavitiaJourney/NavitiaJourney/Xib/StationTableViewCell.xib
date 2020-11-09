@@ -29,9 +29,12 @@
                             <constraint firstAttribute="height" constant="21" id="XzL-5T-29c"/>
                         </constraints>
                         <state key="normal" image="favoriteButtonFilled"/>
+                        <connections>
+                            <action selector="favoriteStateChangeButton:" destination="vY9-5n-cUA" eventType="touchUpInside" id="rM4-Ue-IzJ"/>
+                        </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Train Station" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hoU-Y4-OWo">
-                        <rect key="frame" x="47" y="10" width="355" height="24"/>
+                        <rect key="frame" x="47" y="12" width="355" height="20"/>
                         <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
                         <color key="textColor" name="StationCellColorSet"/>
                         <nil key="highlightedColor"/>

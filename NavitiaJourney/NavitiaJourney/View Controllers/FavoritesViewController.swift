@@ -11,7 +11,27 @@ class FavoritesViewController: UIViewController {
 
 	//MARK: - Outlets
 
-	@IBOutlet weak var stationSearchBarOutlet: UISearchBar!
+	@IBOutlet weak var searchBarContainer: UIView! {
+		didSet {
+			searchBarContainer.layer.cornerRadius = 10
+			searchBarContainer.backgroundColor = UIColor.white
+		}
+	}
+	@IBOutlet weak var stationSearchBarOutlet: UISearchBar! {
+		didSet {
+			stationSearchBarOutlet.delegate = self
+			let searchTextField: UITextField? = stationSearchBarOutlet.value(forKey: "searchField") as? UITextField
+			searchTextField?.textColor = UIColor.black
+			searchTextField?.font = UIFont(name: "Poppins-Regular", size: 17)
+			searchTextField?.delegate = self
+			let placeHolderLabel = searchTextField!.value(forKey: "placeholderLabel") as? UILabel
+			placeHolderLabel?.font = UIFont(name: "Poppins-Regular", size: 17)
+			if searchTextField!.responds(to: #selector(getter: UITextField.attributedPlaceholder)) {
+				let attributeDict = [NSAttributedString.Key.foregroundColor: UIColor(named: "SearchBarPlaceHolderColor")]
+				searchTextField!.attributedPlaceholder = NSAttributedString(string: "Rechercher une station", attributes: attributeDict as [NSAttributedString.Key : Any])
+			}
+		}
+	}
 	@IBOutlet weak var stationTableView: UITableView! {
 		didSet {
 			stationTableView.delegate = self
@@ -34,6 +54,10 @@ class FavoritesViewController: UIViewController {
 		self.title = "FavoritesVC"
 		self.navigationController?.navigationBar.isHidden = true
 		self.view.backgroundColor = UIColor(named: "BackgroundColorSet")
+		
+		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+		view.addGestureRecognizer(tap)
+
 		let service = TrainStationService()
 		service.getTrainStations { [weak self] result in
 			guard let strongSelf = self else { return }
@@ -55,6 +79,12 @@ class FavoritesViewController: UIViewController {
 		stationTableView.reloadData()
 	}
 	
+	//MARK: - Privates
+	
+	@objc private func dismissKeyboard() {
+		view.endEditing(true)
+	}
+}
 
 //MARK: - StationTableViewCelleDelegate Methods
 
@@ -111,5 +141,32 @@ extension FavoritesViewController: UITableViewDataSource {
 		cell.delegate = self
 
 		return cell
+	}
+}
+
+//MARK: - UISearchBarDelegate
+
+extension FavoritesViewController: UISearchBarDelegate {
+	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		let textToSearch: String = stationSearchBarOutlet.text ?? ""
+		filteredTrainStations = []
+		for station in storageController!.trainStations {
+			if (station.name.lowercased().contains(textToSearch.lowercased())) {
+				filteredTrainStations.append(station)
+			}
+		}
+		if (textToSearch.isEmpty) {
+			filteredTrainStations = storageController!.trainStations
+		}
+		stationTableView.reloadData()
+	}
+}
+
+//MARK: - UITextfieldDelegate
+
+extension FavoritesViewController: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
 	}
 }
