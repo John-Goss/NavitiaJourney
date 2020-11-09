@@ -8,11 +8,13 @@
 import Foundation
 
 class StationTableViewModel: NSObject {
+	let id: String
 	let name: String
 	let isFavorite: Bool
 	let favoriteButtonImageName: String
 
-	init(name: String, isFavorite: Bool, favoriteButtonImageName: String) {
+	init(id: String, name: String, isFavorite: Bool, favoriteButtonImageName: String) {
+		self.id = id
 		self.name = name
 		self.isFavorite = isFavorite
 		self.favoriteButtonImageName = favoriteButtonImageName

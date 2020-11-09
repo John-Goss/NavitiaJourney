@@ -11,10 +11,12 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
-	
+	let store = Store()
+
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		window = UIWindow(frame: UIScreen.main.bounds)
 		let homeViewController = FavoritesViewController()
+		homeViewController.storageController = self.store
 		let navigationController = UINavigationController(rootViewController: homeViewController)
 		navigationController.navigationBar.isTranslucent = false
 		self.window?.rootViewController = navigationController

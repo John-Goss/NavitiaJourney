@@ -9,19 +9,19 @@ import UIKit
 
 class StationMapper: NSObject {
 	let currentStation: TrainStation
+	var isInFavoriteStation: Bool
 	
-	init(station: TrainStation) {
+	init(station: TrainStation, isInFavorites: Bool) {
 		currentStation = station
+		isInFavoriteStation = isInFavorites
 	}
 	
 	func build() -> StationTableViewModel {
 		var favoriteButtonImageName: String
-		var isInFavoriteStation: Bool // TO IMPLEMENT
 
-		isInFavoriteStation = false // TO REMOVE
 		favoriteButtonImageName = isInFavoriteStation ? "favoriteButtonFilled" : "favoriteButtonBlank"
 
-		let viewModel = StationTableViewModel(name: currentStation.name, isFavorite: isInFavoriteStation, favoriteButtonImageName: favoriteButtonImageName)
+		let viewModel = StationTableViewModel(id: currentStation.id, name: currentStation.name, isFavorite: isInFavoriteStation, favoriteButtonImageName: favoriteButtonImageName)
 		return viewModel
 	}
 }

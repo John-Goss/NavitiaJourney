@@ -11,8 +11,8 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 	var window: UIWindow?
-	
-	
+	let store = Store()
+
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		// Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
 		// If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		window = UIWindow(windowScene: windowScene)
 		let homeViewController = FavoritesViewController()
+		homeViewController.storageController = self.store
 		let navigationController = UINavigationController(rootViewController: homeViewController)
 		navigationController.navigationBar.isTranslucent = false
 		self.window?.rootViewController = navigationController

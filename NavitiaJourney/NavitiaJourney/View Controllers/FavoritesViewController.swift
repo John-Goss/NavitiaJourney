@@ -21,6 +21,11 @@ class FavoritesViewController: UIViewController {
 			stationTableView.backgroundColor = UIColor(named: "BackgroundColorSet")
 		}
 	}
+	
+	//MARK: - Properties
+
+	var storageController: Store?
+	private var filteredTrainStations: [TrainStation] = []
 
 	//MARK: - UIViewController Methods
 
@@ -29,6 +34,27 @@ class FavoritesViewController: UIViewController {
 		self.title = "FavoritesVC"
 		self.navigationController?.navigationBar.isHidden = true
 		self.view.backgroundColor = UIColor(named: "BackgroundColorSet")
+		let service = TrainStationService()
+		service.getTrainStations { [weak self] result in
+			guard let strongSelf = self else { return }
+			switch result {
+			case let .success(p):
+				print(p)
+				strongSelf.storageController?.trainStations = p.places
+				DispatchQueue.main.async {
+					strongSelf.stationTableView.reloadData()
+				}
+			case let .failure(error):
+				print("--> Train Stations Error: \(error)")
+			}
+		}
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		stationTableView.reloadData()
+	}
+	
 	}
 }
 
@@ -36,7 +62,7 @@ class FavoritesViewController: UIViewController {
 
 extension FavoritesViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		
+		stationTableView.reloadData()
 	}
 }
 
@@ -44,17 +70,31 @@ extension FavoritesViewController: UITableViewDelegate {
 
 extension FavoritesViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 3 // TO DO
+		if let searchTextField: UITextField = stationSearchBarOutlet.value(forKey: "searchField") as? UITextField {
+			if !(searchTextField.text!.isEmpty) {
+				return filteredTrainStations.count
+			}
+		}
+		return storageController?.favoritesTrainStations.count ?? 0
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		guard let cell = stationTableView.dequeueReusableCell(withIdentifier: StationTableViewCell.reuseIdentifier) as? StationTableViewCell else {
 			return StationTableViewCell()
 		}
-		// TO DO get currentStation from Store.stations[indexPath.row]
-		let currentStation = TrainStation(id: "21", name: "Gare De Lyon", quality: 3)
-		let viewModel = StationMapper(station: currentStation).build()
+		var currentStation: TrainStation? = nil
+		if let searchTextField: UITextField = stationSearchBarOutlet.value(forKey: "searchField") as? UITextField {
+			if !(searchTextField.text!.isEmpty) {
+				currentStation = filteredTrainStations[indexPath.row]
+			}
+		}
+		if currentStation == nil {
+			currentStation = storageController?.favoritesTrainStations[indexPath.row] ?? TrainStation(id: "default", name: "default", quality: 0)
+		}
+		let isFavoriteTrainStation = storageController?.isInFavorites(trainStationID: currentStation!.id)
+		let viewModel = StationMapper(station: currentStation!, isInFavorites: isFavoriteTrainStation!).build()
 		cell.setup(viewModel: viewModel)
+		cell.delegate = self
 
 		return cell
 	}
