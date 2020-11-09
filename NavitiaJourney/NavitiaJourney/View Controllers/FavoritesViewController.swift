@@ -55,6 +55,20 @@ class FavoritesViewController: UIViewController {
 		stationTableView.reloadData()
 	}
 	
+
+//MARK: - StationTableViewCelleDelegate Methods
+
+extension FavoritesViewController: StationTableViewCellDelegate {
+	func stationTableViewCell(didTapAddToFavorite stationIdToAdd: String) {
+		storageController?.addToFavorite(trainStationID: stationIdToAdd)
+	}
+	
+	func stationTableViewCell(didTapRemoveFromFavorite stationIdToRemove: String) {
+		storageController?.deleteFromFavorite(trainStationID: stationIdToRemove)
+	}
+	
+	func reloadDatas() {
+		stationTableView.reloadData()
 	}
 }
 
