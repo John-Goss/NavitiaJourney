@@ -150,15 +150,17 @@ extension FavoritesViewController: UISearchBarDelegate {
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		let textToSearch: String = stationSearchBarOutlet.text ?? ""
 		filteredTrainStations = []
-		for station in storageController!.trainStations {
-			if (station.name.lowercased().contains(textToSearch.lowercased())) {
-				filteredTrainStations.append(station)
+		if let store = storageController {
+			for station in store.trainStations {
+				if (station.name.lowercased().contains(textToSearch.lowercased())) {
+					filteredTrainStations.append(station)
+				}
 			}
+			if (textToSearch.isEmpty) {
+				filteredTrainStations = store.trainStations
+			}
+			stationTableView.reloadData()
 		}
-		if (textToSearch.isEmpty) {
-			filteredTrainStations = storageController!.trainStations
-		}
-		stationTableView.reloadData()
 	}
 }
 
