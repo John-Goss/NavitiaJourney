@@ -20,7 +20,6 @@ class TrainStationService: NSObject {
 				do {
 					let decoder = JSONDecoder()
 					let jsonString = String(data: response.data!, encoding: .utf8)
-					print("json String", jsonString!)
 					let trainStations = try decoder.decode(Places.self, from: response.data!)
 					result(.success(trainStations))
 				} catch let err {

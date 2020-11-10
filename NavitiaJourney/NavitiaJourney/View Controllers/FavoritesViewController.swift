@@ -65,6 +65,7 @@ class FavoritesViewController: UIViewController {
 			case let .success(p):
 				print(p)
 				strongSelf.storageController?.trainStations = p.places
+				strongSelf.storageController?.setupFavoritesTrainStationsFromIds()
 				DispatchQueue.main.async {
 					strongSelf.stationTableView.reloadData()
 				}
