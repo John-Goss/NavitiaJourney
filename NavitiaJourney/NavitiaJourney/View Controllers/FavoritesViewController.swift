@@ -46,6 +46,7 @@ class FavoritesViewController: UIViewController {
 
 	var storageController: Store?
 	private var filteredTrainStations: [TrainStation] = []
+	private let service = TrainStationService()
 
 	//MARK: - UIViewController Methods
 
@@ -58,7 +59,6 @@ class FavoritesViewController: UIViewController {
 		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
 		view.addGestureRecognizer(tap)
 
-		let service = TrainStationService()
 		service.getTrainStations { [weak self] result in
 			guard let strongSelf = self else { return }
 			switch result {
