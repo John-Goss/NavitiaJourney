@@ -34,4 +34,29 @@ class TrainStationService: NSObject {
 			}
 		}
 	}
+
+	func getTrainStationsSchedules(trainStationId: String, result: @escaping (Swift.Result<Departures, Error>) -> Void) {
+		let id: String = trainStationId
+		let trainStationSchedulesEndpoint: URL = URL(string: "https://api.navitia.io/v1/coverage/fr-idf/stop_areas/\(id)/departures?")!
+		let headers = ["Authorization": self.APIKey]
+		Alamofire.request(trainStationSchedulesEndpoint, method: .get, headers: headers).responseJSON { response in
+			switch response.result {
+			case .success:
+				do {
+					let decoder = JSONDecoder()
+					let jsonString = String(data: response.data!, encoding: .utf8)
+					print(jsonString ?? "getTrainStationsSchedules - Error conversion from data to string")
+					let trainStations = try decoder.decode(Departures.self, from: response.data!)
+					result(.success(trainStations))
+				} catch let err {
+					print("ERROR CATCH get trainStations: ", err)
+					result(.failure(err))
+				}
+				break
+			case .failure(let error):
+				result(.failure(error))
+				break
+			}
+		}
+	}
 }
