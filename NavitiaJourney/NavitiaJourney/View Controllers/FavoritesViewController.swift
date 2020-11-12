@@ -52,7 +52,7 @@ class FavoritesViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.title = "FavoritesVC"
+		self.title = "Horaires"
 		self.navigationController?.navigationBar.isHidden = true
 		self.view.backgroundColor = UIColor(named: "BackgroundColorSet")
 
@@ -72,8 +72,9 @@ class FavoritesViewController: UIViewController {
 		}
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.navigationController?.navigationBar.isHidden = true
 		stationTableView.reloadData()
 	}
 }
@@ -98,7 +99,42 @@ extension FavoritesViewController: StationTableViewCellDelegate {
 
 extension FavoritesViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		stationTableView.reloadData()
+		if let searchTextField: UITextField = stationSearchBarOutlet.value(forKey: "searchField") as? UITextField {
+			if !(searchTextField.text!.isEmpty) {
+				let stationName: String = filteredTrainStations[indexPath.row].name
+				service.getTrainStationsSchedules(trainStationId: filteredTrainStations[indexPath.row].id, result: { [weak self, stationName] result in
+					guard let strongSelf = self else { return }
+					switch result {
+					case let .success(p):
+						DispatchQueue.main.async {
+							let vc = SchedulesViewController(stationScheduleName: stationName)
+							vc.schedulesArray = p.departures
+							strongSelf.navigationController?.pushViewController(vc, animated: true)
+						}
+					case let .failure(error):
+						print("--> Train Stations Schedule Error: \(error)")
+					}
+				})
+			}
+			else {
+				if let store = storageController {
+					let stationName: String = store.favoritesTrainStations[indexPath.row].name
+					service.getTrainStationsSchedules(trainStationId: store.favoritesTrainStations[indexPath.row].id, result: { [weak self, stationName] result in
+						guard let strongSelf = self else { return }
+						switch result {
+						case let .success(p):
+							DispatchQueue.main.async {
+								let vc = SchedulesViewController(stationScheduleName: stationName)
+								vc.schedulesArray = p.departures
+								strongSelf.navigationController?.pushViewController(vc, animated: true)
+							}
+						case let .failure(error):
+							print("--> Train Stations Schedule Error: \(error)")
+						}
+					})
+				}
+			}
+		}
 	}
 }
 
