@@ -15,6 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		window = UIWindow(frame: UIScreen.main.bounds)
+
+		let attributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "NavBarButtonColor")!, NSAttributedString.Key.font: UIFont(name: "Poppins-Regular", size: 17)!]
+		UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .normal)
+		UINavigationBar.appearance().barTintColor = UIColor(named: "StationCellColorSet")
+		
 		let homeViewController = FavoritesViewController()
 		homeViewController.storageController = self.store
 		let navigationController = UINavigationController(rootViewController: homeViewController)
