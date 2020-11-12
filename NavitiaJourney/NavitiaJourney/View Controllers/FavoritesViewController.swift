@@ -55,9 +55,6 @@ class FavoritesViewController: UIViewController {
 		self.title = "FavoritesVC"
 		self.navigationController?.navigationBar.isHidden = true
 		self.view.backgroundColor = UIColor(named: "BackgroundColorSet")
-		
-		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-		view.addGestureRecognizer(tap)
 
 		service.getTrainStations { [weak self] result in
 			guard let strongSelf = self else { return }
@@ -78,12 +75,6 @@ class FavoritesViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		stationTableView.reloadData()
-	}
-	
-	//MARK: - Privates
-	
-	@objc private func dismissKeyboard() {
-		view.endEditing(true)
 	}
 }
 

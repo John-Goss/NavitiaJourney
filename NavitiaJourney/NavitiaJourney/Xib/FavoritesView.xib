@@ -68,7 +68,7 @@
                         <constraint firstItem="8yS-if-2kh" firstAttribute="top" secondItem="7We-tK-URr" secondAttribute="top" constant="88" id="hVm-ov-nWC"/>
                     </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="61" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YFd-Yg-ART">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" style="plain" separatorStyle="default" rowHeight="61" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YFd-Yg-ART">
                     <rect key="frame" x="0.0" y="200" width="414" height="662"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
