@@ -11,22 +11,27 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
-	let store = Store()
-
+	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		window = UIWindow(frame: UIScreen.main.bounds)
-
+		
 		let attributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "NavBarButtonColor")!, NSAttributedString.Key.font: UIFont(name: "Poppins-Regular", size: 17)!]
 		UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .normal)
 		UINavigationBar.appearance().barTintColor = UIColor(named: "StationCellColorSet")
 		
-		let homeViewController = FavoritesViewController()
-		homeViewController.storageController = self.store
-		let navigationController = UINavigationController(rootViewController: homeViewController)
-		navigationController.navigationBar.isTranslucent = false
-		self.window?.rootViewController = navigationController
-		self.window?.makeKeyAndVisible()
-		return true
+		if #available(iOS 13, *) {
+			return true
+		} else {
+			let store = Store()
+
+			let homeViewController = FavoritesViewController()
+			homeViewController.storageController = store
+			let navigationController = UINavigationController(rootViewController: homeViewController)
+			navigationController.navigationBar.isTranslucent = false
+			self.window?.rootViewController = navigationController
+			self.window?.makeKeyAndVisible()
+			return true
+		}
 	}
 	
 	// MARK: UISceneSession Lifecycle
