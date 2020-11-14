@@ -20,15 +20,16 @@ class FavoritesViewController: UIViewController {
 	@IBOutlet weak var stationSearchBarOutlet: UISearchBar! {
 		didSet {
 			stationSearchBarOutlet.delegate = self
-			let searchTextField: UITextField? = stationSearchBarOutlet.value(forKey: "searchField") as? UITextField
-			searchTextField?.textColor = UIColor.black
-			searchTextField?.font = UIFont(name: "Poppins-Regular", size: 17)
-			searchTextField?.delegate = self
-			let placeHolderLabel = searchTextField!.value(forKey: "placeholderLabel") as? UILabel
-			placeHolderLabel?.font = UIFont(name: "Poppins-Regular", size: 17)
-			if searchTextField!.responds(to: #selector(getter: UITextField.attributedPlaceholder)) {
-				let attributeDict = [NSAttributedString.Key.foregroundColor: UIColor(named: "SearchBarPlaceHolderColor")]
-				searchTextField!.attributedPlaceholder = NSAttributedString(string: "Rechercher une station", attributes: attributeDict as [NSAttributedString.Key : Any])
+			if let searchTextField = stationSearchBarOutlet.value(forKey: "searchField") as? UITextField {
+				searchTextField.textColor = UIColor.black
+				searchTextField.font = UIFont(name: "Poppins-Regular", size: 17)
+				if let placeHolderLabel = searchTextField.value(forKey: "placeholderLabel") as? UILabel {
+					placeHolderLabel.font = UIFont(name: "Poppins-Regular", size: 17)
+				}
+				if searchTextField.responds(to: #selector(getter: UITextField.attributedPlaceholder)) {
+					let attributeDict = [NSAttributedString.Key.foregroundColor: UIColor(named: "SearchBarPlaceHolderColor")]
+					searchTextField.attributedPlaceholder = NSAttributedString(string: "Rechercher une station", attributes: attributeDict as [NSAttributedString.Key : Any])
+				}
 			}
 		}
 	}
@@ -190,13 +191,8 @@ extension FavoritesViewController: UISearchBarDelegate {
 			stationTableView.reloadData()
 		}
 	}
-}
 
-//MARK: - UITextfieldDelegate
-
-extension FavoritesViewController: UITextFieldDelegate {
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		searchBar.resignFirstResponder()
 	}
 }
