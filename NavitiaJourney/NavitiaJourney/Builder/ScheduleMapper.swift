@@ -31,7 +31,7 @@ class ScheduleMapper: NSObject {
 			return "metro"
 		case "Bus":
 			return "bus"
-		case "Tramway", "Train", "RER":
+		case "Tramway", "Train", "RER", "TER":
 			return "tram"
 		default:
 			return ""
