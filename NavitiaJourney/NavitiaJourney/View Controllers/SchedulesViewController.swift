@@ -44,9 +44,6 @@ class SchedulesViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.navigationController?.navigationBar.isHidden = false
-		for i in schedulesArray! {
-			print("CommercialMode: ", i.informations.commercial_mode)
-		}
 		scheduleTableView.reloadData()
 	}
 }
