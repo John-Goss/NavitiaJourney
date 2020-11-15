@@ -102,7 +102,7 @@ extension FavoritesViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if let searchTextField: UITextField = stationSearchBarOutlet.value(forKey: "searchField") as? UITextField {
 			if !(searchTextField.text!.isEmpty) {
-				let stationName: String = filteredTrainStations[indexPath.row].name
+				let stationName: String = filteredTrainStations[indexPath.row].displayName
 				service.getTrainStationsSchedules(trainStationId: filteredTrainStations[indexPath.row].id, result: { [weak self, stationName] result in
 					guard let strongSelf = self else { return }
 					switch result {
@@ -119,7 +119,7 @@ extension FavoritesViewController: UITableViewDelegate {
 			}
 			else {
 				if let store = storageController {
-					let stationName: String = store.favoritesTrainStations[indexPath.row].name
+					let stationName: String = store.favoritesTrainStations[indexPath.row].displayName
 					service.getTrainStationsSchedules(trainStationId: store.favoritesTrainStations[indexPath.row].id, result: { [weak self, stationName] result in
 						guard let strongSelf = self else { return }
 						switch result {
@@ -162,7 +162,7 @@ extension FavoritesViewController: UITableViewDataSource {
 			}
 		}
 		if currentStation == nil {
-			currentStation = storageController?.favoritesTrainStations[indexPath.row] ?? TrainStation(id: "default", name: "default", quality: 0)
+			currentStation = storageController?.favoritesTrainStations[indexPath.row] ?? TrainStation(id: "default", fullName: "default", quality: 0, stopArea: StopArea(displayName: "default"))
 		}
 		let isFavoriteTrainStation = storageController?.isInFavorites(trainStationID: currentStation!.id)
 		let viewModel = StationMapper(station: currentStation!, isInFavorites: isFavoriteTrainStation!).build()
@@ -181,7 +181,7 @@ extension FavoritesViewController: UISearchBarDelegate {
 		filteredTrainStations = []
 		if let store = storageController {
 			for station in store.trainStations {
-				if (station.name.lowercased().contains(textToSearch.lowercased())) {
+				if (station.displayName.lowercased().contains(textToSearch.lowercased())) {
 					filteredTrainStations.append(station)
 				}
 			}

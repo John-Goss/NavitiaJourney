@@ -21,7 +21,7 @@ class StationMapper: NSObject {
 
 		favoriteButtonImageName = isInFavoriteStation ? "favoriteButtonFilled" : "favoriteButtonBlank"
 
-		let viewModel = StationTableViewModel(id: currentStation.id, name: currentStation.name, isFavorite: isInFavoriteStation, favoriteButtonImageName: favoriteButtonImageName)
+		let viewModel = StationTableViewModel(id: currentStation.id, name: currentStation.displayName, isFavorite: isInFavoriteStation, favoriteButtonImageName: favoriteButtonImageName)
 		return viewModel
 	}
 }
