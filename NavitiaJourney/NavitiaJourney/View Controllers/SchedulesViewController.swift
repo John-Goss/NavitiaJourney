@@ -9,9 +9,12 @@ import UIKit
 
 class SchedulesViewController: UIViewController {
 
+	//MARK: - Outlets
+
 	@IBOutlet weak var scheduleTableView: UITableView! {
 		didSet {
 			scheduleTableView.dataSource = self
+			scheduleTableView.delegate = self
 			let cell = UINib(nibName: ScheduleTableViewCell.nibName, bundle: nil)
 			scheduleTableView.register(cell, forCellReuseIdentifier: ScheduleTableViewCell.reuseIdentifier)
 			scheduleTableView.backgroundColor = UIColor(named: "BackgroundColorSet")
@@ -19,8 +22,13 @@ class SchedulesViewController: UIViewController {
 	}
 	@IBOutlet weak var stationNameLabel: UILabel!
 
+	//MARK: - Properties
+
 	var schedulesArray: [Schedule]?
 	var actualStation: String = ""
+	private let cellSpacingHeight: CGFloat = 5.5
+
+	//MARK: - UIViewController Methods
 
 	required init(stationScheduleName: String) {
 		actualStation = stationScheduleName
@@ -51,18 +59,38 @@ class SchedulesViewController: UIViewController {
 //MARK: - UITableViewDataSource Methods
 
 extension SchedulesViewController: UITableViewDataSource {
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	
+	func numberOfSections(in tableView: UITableView) -> Int {
 		return schedulesArray?.count ?? 0
+	}
+
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 1
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		guard let cell = scheduleTableView.dequeueReusableCell(withIdentifier: ScheduleTableViewCell.reuseIdentifier) as? ScheduleTableViewCell else {
 			return ScheduleTableViewCell()
 		}
-		cell.layer.cornerRadius = 20
-		let viewModel = ScheduleMapper(schedule: schedulesArray![indexPath.row]).build()
+		let viewModel = ScheduleMapper(schedule: schedulesArray![indexPath.section]).build()
 		cell.setup(viewModel: viewModel)
+		cell.layer.cornerRadius = 20
+		cell.clipsToBounds = true
 
 		return cell
+	}
+}
+
+//MARK: - UITableViewDelegate Methods
+
+extension SchedulesViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return cellSpacingHeight
+	}
+
+	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		let headerView = UIView()
+		headerView.backgroundColor = UIColor.clear
+		return headerView
 	}
 }
