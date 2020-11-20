@@ -30,7 +30,7 @@ class StationTableViewCell: UITableViewCell {
 
 	var stationID: String = ""
 	var isFavorite: Bool = false
-	var delegate: StationTableViewCellDelegate?
+	weak var delegate: StationTableViewCellDelegate?
 
 	//MARK: - UITableViewCell Methods
 
